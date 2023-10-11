@@ -20,10 +20,8 @@ class ProductController extends Controller
 
     public function createNewProduct($data)
     {
-
         // Extract data from the request
         $productType = $data['productType'];
-        error_log(print_r($productType));
 
         // Handle product creation based on productType
         $product = ProductFactory::Create($productType, $data);
@@ -34,21 +32,43 @@ class ProductController extends Controller
             $productsTable->insertProduct($product);
 
             // prepare success response
-            $response = array('success' => true, 'message' => '');
-            error_log(print_r($response, true));
-            error_log(json_encode($response));
+            $response = array('success' => true);
 
             return $response;
         } else {
             $response = array('success' => false);
-            // error_log(print_r($response, true));
-            // error_log(json_encode($response));
 
             return $response;
         }
     }
 }
 
+class DeleteProductsController extends Controller
+{
+    public function deleteProducts()
+    {
+        // Parse JSON data from the request
+        $data = json_decode(file_get_contents('php://input'), true);
+
+        if (isset($data['selectedIDs'])) {
+            // Retrieve selectedIDs array from the request
+            $selectedIDs = $data['selectedIDs'];
+
+            // Create ProductsTable class and call delete method
+            $productsTable = new ProductsTable();
+            $productsTable->deleteProducts($selectedIDs);
+
+            // success response
+            $response = ['success' => true];
+        } else {
+            // error response
+            $response = ['success' => false, 'message' => 'Missing selectedIDs'];
+        }
+
+        // Return the response as JSON
+        echo json_encode($response);
+    }
+}
 
 class ProductFactory
 {
@@ -65,6 +85,3 @@ class ProductFactory
         return $product;
     }
 }
-
-// $productController = new ProductController();
-// $productController->createNewProduct();

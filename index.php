@@ -5,7 +5,7 @@ require_once './models/ProductsTable.php';
 require_once './database/DB.php';
 require_once './models/Product.php';
 require_once './controllers/ProductController.php';
-require_once './controllers/DeleteProductsController.php';
+// require_once './controllers/DeleteProductsController.php';
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['endpoint'])) {
     }
 }
 
-// Check unique SKU
+// CHECK UNIQUE SKU
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'check-sku') {
     // Check if the 'sku' parameter is set in the URL
     if (isset($_GET['sku'])) {
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
     }
 }
 
-// Remove product
+// REMOVE PRODUCT
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['endpoint'])) {
     $endpoint = $_GET['endpoint'];
 
