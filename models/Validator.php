@@ -1,6 +1,6 @@
 <?php
 
-require_once('./database/DB.php');
+require_once('../database/DB.php');
 
 class Validator
 {
@@ -39,9 +39,9 @@ class Validator
         $skuErrors = [];
 
         if (empty($sku)) {
-            $skuErrors['sku'] = 'Please provide the SKU';
-        } elseif (strlen($sku) > 10) {
-            $skuErrors['sku'] = 'SKU must be less than 10 characters long';
+            $skuErrors['sku'] = 'Please, submit required data';
+        } elseif (strlen($sku) > 20) {
+            $skuErrors['sku'] = 'SKU must be less than 20 characters long';
         }
 
         return $skuErrors;
@@ -52,7 +52,7 @@ class Validator
         $nameErrors = [];
 
         if (empty($name)) {
-            $nameErrors['name'] = 'Please provide the name';
+            $nameErrors['name'] = 'Please, submit required data';
         } elseif (strlen($name) > 30) {
             $nameErrors['name'] = 'Product name is too long';
         } elseif (!is_string($name)) {
@@ -66,7 +66,7 @@ class Validator
         $priceErrors = [];
 
         if (empty($price)) {
-            $priceErrors['price'] = 'Please provide the price';
+            $priceErrors['price'] = 'Please, submit required data';
         } elseif (!is_numeric($price)) {
             $priceErrors['price'] = 'Please provide a valid numeric price';
         } elseif ($price <= 0) {
@@ -85,17 +85,17 @@ class Validator
         // Validation and errors based on the selected product type
         switch ($productType) {
             case 'DVD':
-                $size = $_POST['size'];
+                $size = $data['size'];
                 $allErrors = array_merge($allErrors, $productTypeValidator->validateSize($size));
                 break;
             case 'book':
-                $weight = $_POST['weight'];
+                $weight = $data['weight'];
                 $allErrors = array_merge($allErrors, $productTypeValidator->validateWeight($weight));
                 break;
             case 'furniture':
-                $height = $_POST['height'];
-                $width = $_POST['width'];
-                $length = $_POST['length'];
+                $height = $data['height'];
+                $width = $data['width'];
+                $length = $data['length'];
                 $allErrors = array_merge($allErrors, $productTypeValidator->validateDimensions($height, $width, $length));
                 break;
             default:
@@ -117,13 +117,13 @@ class ProductTypeValidator
 
         // Validation rule for size
         if (empty($size)) {
-            $sizeErrors['size'] = 'Please provide the size';
+            $sizeErrors['size'] = 'Please, submit required data';
         } elseif (strlen($size) > 10) {
             $sizeErrors['size'] = 'Size is too big';
         } elseif ($size <= 0) {
             $sizeErrors['size'] = 'Size must be greater than zero';
-        } elseif (!is_numeric($size)) {
-            $sizeErrors['size'] = 'Please provide a valid numeric data';
+        } elseif (!preg_match('/^[0-9A-Za-z\s.,\/-]*$/', $size)) {
+            $sizeErrors['size'] = 'Please, provide the data of indicated type';
         }
         return $sizeErrors;
     }
@@ -134,13 +134,13 @@ class ProductTypeValidator
 
         // Validation rule for weight
         if (empty($weight)) {
-            $weightErrors['weight'] = 'Please provide the weight';
+            $weightErrors['weight'] = 'Please, submit required data';
         } elseif (strlen($weight) > 10) {
             $weightErrors['weight'] = 'Weight is too big';
         } elseif ($weight <= 0) {
             $weightErrors['weight'] = 'Weight must be greater than zero';
-        } elseif (!is_numeric($weight)) {
-            $weightErrors['weight'] = 'Please provide a valid numeric data';
+        } elseif (!preg_match('/^[0-9A-Za-z\s.,\/-]*$/', $weight)) {
+            $sizeErrors['weight'] = 'Please, provide the data of indicated type';
         }
         return $weightErrors;
     }
@@ -151,9 +151,9 @@ class ProductTypeValidator
 
         // Validation rule for height
         if (empty($height)) {
-            $dimensionErrors['height'] = 'Please provide the height';
-        } elseif (!is_numeric($height)) {
-            $dimensionErrors['height'] = 'Please provide a valid numeric height';
+            $dimensionErrors['height'] = 'Please, submit required data';
+        } elseif (!preg_match('/^[0-9A-Za-z\s.,\/-]*$/', $height)) {
+            $sizeErrors['height'] = 'Please, provide the data of indicated type';
         } elseif (strlen($height) > 10) {
             $dimensionErrors['height'] = 'Height is too big';
         } elseif ($height <= 0) {
@@ -162,9 +162,9 @@ class ProductTypeValidator
 
         // Validation rule for width
         if (empty($width)) {
-            $dimensionErrors['width'] = 'Please provide the width';
-        } elseif (!is_numeric($width)) {
-            $dimensionErrors['width'] = 'Please provide a valid numeric width';
+            $dimensionErrors['width'] = 'Please, submit required data';
+        } elseif (!preg_match('/^[0-9A-Za-z\s.,\/-]*$/', $width)) {
+            $sizeErrors['width'] = 'Please, provide the data of indicated type';
         } elseif (strlen($width) > 10) {
             $dimensionErrors['width'] = 'Width is too big';
         } elseif ($width <= 0) {
@@ -173,9 +173,9 @@ class ProductTypeValidator
 
         // Validation rule for length
         if (empty($length)) {
-            $dimensionErrors['length'] = 'Please provide the length';
-        } elseif (!is_numeric($length)) {
-            $dimensionErrors['length'] = 'Please provide a valid numeric length';
+            $dimensionErrors['length'] = 'Please, submit required data';
+        } elseif (!preg_match('/^[0-9A-Za-z\s.,\/-]*$/', $length)) {
+            $sizeErrors['length'] = 'Please, provide the data of indicated type';
         } elseif (strlen($length) > 10) {
             $dimensionErrors['length'] = 'Length is too big';
         } elseif ($length <= 0) {

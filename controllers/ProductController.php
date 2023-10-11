@@ -7,13 +7,13 @@ use models\productTypes\Furniture;
 session_start();
 
 // require_once('./database/DB.php');
-require_once('./core/Controller.php');
-require_once('./models/Validator.php');
-require_once('./models/ProductsTable.php');
-require_once('./models/Product.php');
-require_once('./models/productTypes/DVD.php');
-require_once('./models/productTypes/Book.php');
-require_once('./models/productTypes/Furniture.php');
+require_once('../core/Controller.php');
+require_once('../models/Validator.php');
+require_once('../models/ProductsTable.php');
+require_once('../models/Product.php');
+require_once('../models/productTypes/DVD.php');
+require_once('../models/productTypes/Book.php');
+require_once('../models/productTypes/Furniture.php');
 
 class ProductController extends Controller
 {
@@ -26,7 +26,9 @@ class ProductController extends Controller
         // Handle product creation based on productType
         $product = ProductFactory::Create($productType, $data);
 
-        if ($product) {
+        $allErrors = Validator::validate($data);
+
+        if (empty($allErrors)) {
             // Insert data to the DB
             $productsTable = new ProductsTable();
             $productsTable->insertProduct($product);
@@ -36,7 +38,7 @@ class ProductController extends Controller
 
             return $response;
         } else {
-            $response = array('success' => false);
+            $response = array('success' => false, 'errors' => $allErrors);
 
             return $response;
         }

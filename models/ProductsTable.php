@@ -3,13 +3,12 @@
 use Models\GetProducts;
 use Models\Product;
 
-require_once('./database/DB.php');
+require_once('../database/DB.php');
 require_once('Product.php');
 
-// opertions with DB
+// All opertions with DB
 class ProductsTable
 {
-
     protected $conn;
 
     public function __construct()

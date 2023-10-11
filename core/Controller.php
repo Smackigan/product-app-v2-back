@@ -1,6 +1,6 @@
 <?php
 
-require_once('./database/DB.php');
+require_once('../database/DB.php');
 
 class Controller
 {

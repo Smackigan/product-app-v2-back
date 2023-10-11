@@ -4,7 +4,7 @@ namespace models\productTypes;
 
 use Models\Product;
 
-require_once('./models/Product.php');
+require_once('../models/Product.php');
 
 class Furniture extends Product
 {
