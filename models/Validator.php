@@ -2,6 +2,7 @@
 
 require_once('../database/DB.php');
 
+// Validation rules
 class Validator
 {
 

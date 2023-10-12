@@ -2,8 +2,6 @@
 
 require_once '../config/db_config.php';
 
-
-
 class DB
 {
     protected $conn;

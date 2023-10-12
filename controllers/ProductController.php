@@ -6,7 +6,6 @@ use models\productTypes\Furniture;
 
 session_start();
 
-// require_once('./database/DB.php');
 require_once('../core/Controller.php');
 require_once('../models/Validator.php');
 require_once('../models/ProductsTable.php');
@@ -15,6 +14,7 @@ require_once('../models/productTypes/DVD.php');
 require_once('../models/productTypes/Book.php');
 require_once('../models/productTypes/Furniture.php');
 
+// Create product
 class ProductController extends Controller
 {
 
@@ -45,6 +45,7 @@ class ProductController extends Controller
     }
 }
 
+// Delete product
 class DeleteProductsController extends Controller
 {
     public function deleteProducts()
