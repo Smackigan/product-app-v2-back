@@ -14,10 +14,11 @@ require_once('../models/productTypes/DVD.php');
 require_once('../models/productTypes/Book.php');
 require_once('../models/productTypes/Furniture.php');
 
-// Create product
+
 class ProductController extends Controller
 {
 
+    // Create product
     public function createNewProduct($data)
     {
         // Extract data from the request
@@ -43,11 +44,8 @@ class ProductController extends Controller
             return $response;
         }
     }
-}
 
-// Delete product
-class DeleteProductsController extends Controller
-{
+    // Delete product
     public function deleteProducts()
     {
         // Parse JSON data from the request
@@ -72,6 +70,7 @@ class DeleteProductsController extends Controller
         echo json_encode($response);
     }
 }
+
 
 class ProductFactory
 {

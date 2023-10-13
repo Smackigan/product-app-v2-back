@@ -14,25 +14,26 @@ header('Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 
 // API ENDPOINTS
 
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['endpoint'])) {
-    $endpoint = $_GET['endpoint'];
+$request_uri = $_SERVER['REQUEST_URI'];
 
-    if ($endpoint === '/api/get-product') {
-        // GET PRODUCTS
-        handleGetProduct();
-    }
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['endpoint'])) {
-    $endpoint = $_GET['endpoint'];
-    $jsonData = file_get_contents('php://input');
-    $data = json_decode($jsonData, true);
+$uri_parts = explode('?', $request_uri);
+$path = $uri_parts[0];
 
-    if ($endpoint === '/api/add-product') {
-        // ADD PRODUCTS
-        handleAddProduct($data);
-    } elseif ($endpoint === '/api/delete-products') {
-        // DELETE PRODUCTS
-        handleDeleteProducts($data);
-    }
+
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && $path === '/api/get-product') {
+    // Handle the GET request for the 'get-product' API
+    handleGetProduct();
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && $path === '/api/add-product') {
+    // Handle the POST request for the 'add-product' API
+    $data = getRequestData();
+    handleAddProduct($data);
+} elseif ($_SERVER['REQUEST_METHOD'] === 'DELETE' && $path === '/api/delete-products') {
+    // Handle the DELETE request for the 'delete-products' API
+    $data = getRequestData();
+    handleDeleteProducts($data);
+} else {
+    // Handle unknown API endpoints
+    echo "Unknown API endpoint: $path";
 }
 
 // GET PRODUCTS
@@ -70,58 +71,16 @@ function handleAddProduct($data)
 // DELETE PRODUCTS
 function handleDeleteProducts($data)
 {
-    // Create an instance of the DeleteProductsController
-    $deleteProductsController = new DeleteProductsController();
+    // Create an instance of ProductController
+    $productController = new ProductController();
 
     // Call the deleteProducts method to handle the deletion
-    $deleteProductsController->deleteProducts();
+    $response = $productController->deleteProducts($data);
 }
 
-
-// if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_SERVER['REQUEST_URI'])) {
-//     $urlPath = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-
-//     if ($urlPath === '/api/get-product') {
-//         // Handle the request here
-//     }
-
-
-// CHECK UNIQUE SKU
-// if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'check-sku') {
-//     // Check if the 'sku' parameter is set in the URL
-//     if (isset($_GET['sku'])) {
-//         // Get the SKU from the URL
-//         $sku = $_GET['sku'];
-
-//         // Create an instance of the ProductsTable class
-//         $productsTable = new ProductsTable();
-
-//         // Use the isSkuUnique function to check if SKU is unique
-//         $isUnique = $productsTable->isSkuUnique($sku);
-
-//         // Return the result as JSON
-//         echo json_encode($isUnique);
-//         exit();
-//     }
-// }
-
-// VALIDATION CHECK
-// if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'check-sku') {
-//     // Check if the 'sku' parameter is set in the URL
-//     if ($endpoint === '/api/validate-input') {
-//         $type = $_POST['type'];
-//         $value = $_POST['value'];
-
-//         // Perform the appropriate validation based on the "type"
-//         $validationResult = null;
-//         if ($type === 'sku') {
-//             $validationResult = isSkuUnique($value);
-//         } elseif ($type === 'anotherType') {
-//             // Perform a different type of validation
-//         }
-
-//         // Return the validation result as JSON
-//         $response = ['isValid' => $validationResult];
-//         echo json_encode($response);
-//     }
-// }
+// Helpers function. Read request from and decode 
+function getRequestData()
+{
+    $jsonData = file_get_contents('php://input');
+    return json_decode($jsonData, true);
+}
